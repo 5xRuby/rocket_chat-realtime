@@ -1,0 +1,7 @@
+require:
+  - rubocop-performance
+  - rubocop-thread_safety
+  - rubocop-rspec
+AllCops:
+  TargetRubyVersion: 2.6.6
+  DisplayCopNames: true
