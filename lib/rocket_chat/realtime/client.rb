@@ -45,6 +45,15 @@ module RocketChat
       def driver
         @driver ||= WebSocket::Driver.client(adapter)
       end
+
+      # Connect to server
+      #
+      # @since 0.1.0
+      def connect
+        connector.connect
+        driver.start
+        Reactor.register(self)
+      end
     end
   end
 end

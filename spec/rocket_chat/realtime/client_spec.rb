@@ -33,4 +33,10 @@ RSpec.describe RocketChat::Realtime::Client do
 
     it { is_expected.to be_a(WebSocket::Driver::Client) }
   end
+
+  describe '#connect' do
+    subject(:connect) { client.connect }
+
+    it { expect { connect }.to change(RocketChat::Realtime::Reactor.clients, :count).by(1) }
+  end
 end

@@ -15,7 +15,7 @@ module RocketChat
       delegate %w[hostname] => :uri
 
       # @since 0.1.0
-      attr_reader :uri, :socket
+      attr_reader :uri
 
       # @param url [String] the websocket server to connect
       #
@@ -33,6 +33,8 @@ module RocketChat
 
         ssl_socket
       end
+
+      alias socket connect
 
       # Check the SSL enabled
       #
