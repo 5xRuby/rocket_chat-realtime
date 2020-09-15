@@ -2,7 +2,7 @@
 
 source 'https://rubygems.org'
 
-# Specify your gem's dependencies in rocket_chat-streaming.gemspec
+# Specify your gem's dependencies in rocket_chat-realtime.gemspec
 gemspec
 
 gem 'rake', '~> 12.0'

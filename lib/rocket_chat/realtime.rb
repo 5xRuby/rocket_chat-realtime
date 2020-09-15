@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require 'rocket_chat/streaming/version'
+require 'rocket_chat/realtime/version'
 
 module RocketChat
-  module Streaming
+  module Realtime
     class Error < StandardError; end
     # Your code goes here...
   end

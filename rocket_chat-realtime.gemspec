@@ -1,16 +1,16 @@
 # frozen_string_literal: true
 
-require_relative 'lib/rocket_chat/streaming/version'
+require_relative 'lib/rocket_chat/realtime/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = 'rocket_chat-streaming'
-  spec.version       = RocketChat::Streaming::VERSION
+  spec.name          = 'rocket_chat-realtime'
+  spec.version       = RocketChat::Realtime::VERSION
   spec.authors       = ['5xRuby']
   spec.email         = ['hello@5xruby.com']
 
-  spec.summary       = 'Rocket.Chat streaming api client'
-  spec.description   = 'Rocket.Chat streaming api client'
-  spec.homepage      = 'https://github.com/5xRuby/rocket_chat-streaming'
+  spec.summary       = 'Rocket.Chat realtime api client'
+  spec.description   = 'Rocket.Chat realtime api client'
+  spec.homepage      = 'https://github.com/5xRuby/rocket_chat-realtime'
   spec.required_ruby_version = Gem::Requirement.new('>= 2.3.0')
 
   spec.metadata['homepage_uri'] = spec.homepage
