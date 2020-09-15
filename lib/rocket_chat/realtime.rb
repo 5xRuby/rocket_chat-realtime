@@ -2,6 +2,7 @@
 
 require 'rocket_chat/realtime/version'
 require 'rocket_chat/realtime/reactor'
+require 'rocket_chat/realtime/connector'
 require 'rocket_chat/realtime/client'
 
 module RocketChat

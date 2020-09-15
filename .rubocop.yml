@@ -5,3 +5,8 @@ require:
 AllCops:
   TargetRubyVersion: 2.6.6
   DisplayCopNames: true
+
+Metrics/BlockLength:
+  Exclude:
+    - spec/**/*_spec.rb
+
