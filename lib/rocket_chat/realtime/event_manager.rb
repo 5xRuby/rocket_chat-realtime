@@ -62,6 +62,14 @@ module RocketChat
         logger.debug(message)
       end
 
+      # Changed handler
+      #
+      # @param message [Hash]
+      def process_changed(message)
+        # TODO
+        logger.debug(message)
+      end
+
       private
 
       # Register Connection Event

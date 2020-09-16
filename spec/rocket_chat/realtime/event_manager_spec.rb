@@ -26,5 +26,11 @@ RSpec.describe RocketChat::Realtime::EventManager do
 
       it { is_expected.to be_truthy }
     end
+
+    context 'when changed message received' do
+      let(:data) { { msg: 'changed' } }
+
+      it { is_expected.to be_truthy }
+    end
   end
 end

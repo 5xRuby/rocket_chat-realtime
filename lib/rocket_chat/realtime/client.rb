@@ -7,6 +7,7 @@ require 'websocket/driver'
 require 'concurrent'
 
 require 'rocket_chat/realtime/methods/auth'
+require 'rocket_chat/realtime/subscriptions/room'
 
 module RocketChat
   module Realtime
@@ -17,6 +18,7 @@ module RocketChat
       extend Forwardable
 
       include Methods::Auth
+      include Subscriptions::Room
 
       # @since 0.1.0
       INITIALIZE_COMMAND = {
