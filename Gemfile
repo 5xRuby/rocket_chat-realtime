@@ -5,6 +5,8 @@ source 'https://rubygems.org'
 # Specify your gem's dependencies in rocket_chat-realtime.gemspec
 gemspec
 
+gem 'pry'
+
 gem 'rake', '~> 12.0'
 gem 'rspec', '~> 3.0'
 gem 'rspec_junit_formatter'
