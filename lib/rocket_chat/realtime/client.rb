@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'forwardable'
+require 'json'
 
 require 'websocket/driver'
 require 'concurrent'
@@ -12,6 +13,13 @@ module RocketChat
     # @since 0.1.0
     class Client
       extend Forwardable
+
+      # @since 0.1.0
+      INITIALIZE_COMMAND = {
+        msg: :connect,
+        version: '1',
+        support: ['1']
+      }.freeze
 
       # @since 0.1.0
       delegate %w[ping pong] => :driver
@@ -43,6 +51,8 @@ module RocketChat
       # @since 0.1.0
       def connect
         driver.start
+        driver.text(INITIALIZE_COMMAND.to_json)
+        # TODO: Execute after connected
         @heartbeat.execute
         Reactor.register(self)
       end
