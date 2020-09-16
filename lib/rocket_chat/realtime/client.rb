@@ -38,11 +38,8 @@ module RocketChat
       # @since 0.1.0
       def initialize(options = {})
         @server = options[:server]
-        @connector = Connector.new(endpoint)
-        @adapter = Adapter.new(endpoint)
-        @driver = WebSocket::Driver.client(adapter)
-        @event = EventManager.new(driver)
-        @heartbeat = Concurrent::TimerTask.new(execution_interval: 5) { ping(Time.now.to_f.to_s) if opened? }
+        init_connection
+        init_events
       end
 
       # @return [String] the realtime api endpoint
@@ -95,6 +92,26 @@ module RocketChat
         RocketChat::Realtime.logger.warn('Remote server is closed.')
         monitor.close
         disconnect
+      end
+
+      private
+
+      # Prepare for connection
+      #
+      # @since 0.1.0
+      def init_connection
+        @connector = Connector.new(endpoint)
+        @adapter = Adapter.new(endpoint)
+        @driver = WebSocket::Driver.client(adapter)
+      end
+
+      # Prepare for events
+      #
+      # @since 0.1.0
+      def init_events
+        @event = EventManager.new(driver)
+        @dispatcher = Dispatcher.new(driver, event)
+        @heartbeat = Concurrent::TimerTask.new(execution_interval: 5) { ping(Time.now.to_f.to_s) if opened? }
       end
     end
   end
