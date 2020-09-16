@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'forwardable'
 require 'websocket/driver'
 
 module RocketChat
@@ -8,6 +9,11 @@ module RocketChat
     #
     # @since 0.1.0
     class Client
+      extend Forwardable
+
+      # @since 0.1.0
+      delegate %w[ping pong] => :driver
+
       # @since 0.1.0
       attr_reader :server, :connector, :adapter, :driver, :event
 
