@@ -39,4 +39,12 @@ RSpec.describe RocketChat::Realtime::Client do
 
     it { expect { connect }.to change(RocketChat::Realtime::Reactor.clients, :count).by(1) }
   end
+
+  describe '#disconnect' do
+    subject(:disconnect) { client.disconnect }
+
+    before { client.connect }
+
+    it { expect { disconnect }.to change { RocketChat::Realtime::Reactor.registered?(client) }.to(false) }
+  end
 end

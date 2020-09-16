@@ -53,6 +53,27 @@ module RocketChat
         driver.start
         Reactor.register(self)
       end
+
+      # Close connection to server
+      #
+      # @since 0.1.0
+      def disconnect
+        driver.close
+        Reactor.deregister(self)
+      end
+
+      # Process I/O
+      #
+      # @param monitor [NIO::Monitor]
+      #
+      # @since 0.1.0
+      def process(monitor)
+        driver.parse(monitor.io.read_nonblock(2**14)) if monitor.readable?
+        adapter.pump_buffer(monitor.io) if monitor.writeable?
+      rescue EOFError
+        monitor.close
+        disconnect
+      end
     end
   end
 end

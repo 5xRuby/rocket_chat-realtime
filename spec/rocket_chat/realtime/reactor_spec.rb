@@ -31,6 +31,20 @@ RSpec.describe RocketChat::Realtime::Reactor do
     end
   end
 
+  describe '.deregister' do
+    subject(:deregister) { described_class.deregister(client) }
+
+    let(:client) { RocketChat::Realtime::Client.new(server: 'wss://example.com') }
+
+    it { is_expected.to be_nil }
+
+    context 'when client is registered' do
+      before { described_class.register(client) }
+
+      it { is_expected.not_to be_nil }
+    end
+  end
+
   describe '.registered?' do
     subject { described_class.registered?(client) }
 

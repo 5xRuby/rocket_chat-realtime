@@ -18,8 +18,10 @@ module RocketChat
         delegate %w[
           selector
           register
+          deregister
           registered?
           clients
+          run
           stop
           stopped?
           reset
@@ -64,6 +66,18 @@ module RocketChat
         monitor.value = client
       end
 
+      # Deregister Client
+      #
+      # @param client [RocketChat::Realtime::Client]
+      #
+      # @since 0.1.0
+      def deregister(client)
+        return unless registered?(client)
+
+        @clients.delete(client)
+        selector.deregister(client.connector.socket)
+      end
+
       # Reset reactor state
       #
       # @since 0.1.0
@@ -84,6 +98,19 @@ module RocketChat
       # @since 0.1.0
       def stopped?
         @stopped == true
+      end
+
+      # Wait I/O ready for read or write
+      #
+      # @since 0.1.0
+      def run
+        @stopped = false
+        until stopped?
+          selector.select(1) do |monitor|
+            monitor.value.process(monitor)
+          end
+          Thread.pass
+        end
       end
     end
   end
