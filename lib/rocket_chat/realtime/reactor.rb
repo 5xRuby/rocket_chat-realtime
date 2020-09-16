@@ -83,33 +83,39 @@ module RocketChat
       # @since 0.1.0
       def reset
         # TODO: Clear clients and registered monitor
-        @stopped = false
+        @thread&.exit
+        @thread = nil
       end
 
       # Stop reactor
       #
       # @since 0.1.0
       def stop
-        @stopped = true
+        @thread&.exit
+        @thread = nil
       end
 
       # @return [Boolean] the reactor is stopped
       #
       # @since 0.1.0
       def stopped?
-        @stopped == true
+        @thread.nil?
       end
 
       # Wait I/O ready for read or write
       #
       # @since 0.1.0
       def run
-        @stopped = false
-        until stopped?
-          selector.select(1) do |monitor|
-            monitor.value.process(monitor)
+        return unless stopped?
+
+        @thread = Thread.start do
+          Thread.current.abort_on_exception = true
+          until stopped?
+            selector.select(1) do |monitor|
+              monitor.value.process(monitor)
+            end
+            Thread.pass
           end
-          Thread.pass
         end
       end
     end

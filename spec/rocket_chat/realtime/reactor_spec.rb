@@ -62,18 +62,20 @@ RSpec.describe RocketChat::Realtime::Reactor do
   describe '.stop' do
     subject { described_class.stop }
 
-    it { is_expected.to be_truthy }
+    it { is_expected.to be_nil }
   end
 
   describe '.stopped?' do
     subject { described_class.stopped? }
 
-    it { is_expected.to be_falsy }
+    it { is_expected.to be_truthy }
 
-    context 'when reactor stopped' do
-      before { described_class.stop }
+    context 'when reactor is running' do
+      before { described_class.run }
 
-      it { is_expected.to be_truthy }
+      after { described_class.stop }
+
+      it { is_expected.to be_falsy }
     end
   end
 end
