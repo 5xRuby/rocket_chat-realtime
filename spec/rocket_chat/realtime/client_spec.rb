@@ -47,4 +47,19 @@ RSpec.describe RocketChat::Realtime::Client do
 
     it { expect { disconnect }.to change { RocketChat::Realtime::Reactor.registered?(client) }.to(false) }
   end
+
+  describe '#process' do
+    subject(:process) { client.process(monitor) }
+
+    let(:addr) { '127.0.0.1' }
+
+    let(:server) { TCPServer.new(addr, 0) }
+    let(:port) { server.local_address.ip_port }
+    let(:socket) { TCPSocket.new(addr, port) }
+
+    let(:selector) { NIO::Selector.new }
+    let(:monitor) { selector.register(socket, :rw) }
+
+    it { expect { process }.not_to raise_error }
+  end
 end
