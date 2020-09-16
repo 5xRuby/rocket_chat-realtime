@@ -3,6 +3,8 @@
 require 'spec_helper'
 
 RSpec.describe RocketChat::Realtime::Reactor do
+  after { described_class.reset }
+
   describe '.selector' do
     subject { described_class.selector }
 
@@ -38,6 +40,24 @@ RSpec.describe RocketChat::Realtime::Reactor do
 
     context 'when client is registed' do
       before { client.connect }
+
+      it { is_expected.to be_truthy }
+    end
+  end
+
+  describe '.stop' do
+    subject { described_class.stop }
+
+    it { is_expected.to be_truthy }
+  end
+
+  describe '.stopped?' do
+    subject { described_class.stopped? }
+
+    it { is_expected.to be_falsy }
+
+    context 'when reactor stopped' do
+      before { described_class.stop }
 
       it { is_expected.to be_truthy }
     end

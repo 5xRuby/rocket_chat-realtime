@@ -20,6 +20,9 @@ module RocketChat
           register
           registered?
           clients
+          stop
+          stopped?
+          reset
         ] => :instance
       end
 
@@ -34,6 +37,7 @@ module RocketChat
       def initialize
         @selector = NIO::Selector.new
         @clients = Set.new
+        reset
       end
 
       # The client is registered
@@ -58,6 +62,28 @@ module RocketChat
         @clients.add(client)
         monitor = selector.register(client.connector.socket, :rw)
         monitor.value = client
+      end
+
+      # Reset reactor state
+      #
+      # @since 0.1.0
+      def reset
+        # TODO: Clear clients and registered monitor
+        @stopped = false
+      end
+
+      # Stop reactor
+      #
+      # @since 0.1.0
+      def stop
+        @stopped = true
+      end
+
+      # @return [Boolean] the reactor is stopped
+      #
+      # @since 0.1.0
+      def stopped?
+        @stopped == true
       end
     end
   end

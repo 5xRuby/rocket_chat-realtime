@@ -50,7 +50,6 @@ module RocketChat
       #
       # @since 0.1.0
       def connect
-        connector.connect
         driver.start
         Reactor.register(self)
       end
