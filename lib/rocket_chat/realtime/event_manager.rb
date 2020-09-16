@@ -35,8 +35,31 @@ module RocketChat
       #
       # @since 0.1.0
       def dispatch(event)
-        logger.info(event.data)
+        # TODO: Move handler to standalone class
+        message = JSON.parse(event.data)
+        handler = "process_#{message['msg']}"
+        send(handler, message) if respond_to?(handler)
+      rescue JSON::ParserError => e
+        logger.error(e.message)
+      end
+
+      # Ping handler
+      #
+      # @param message [Hash]
+      #
+      # @since 0.1.0
+      def process_ping(_message)
+        driver.text({ msg: 'pong' }.to_json)
+      end
+
+      # Result handler
+      #
+      # @param message [Hash]
+      #
+      # @since 0.1.0
+      def process_result(message)
         # TODO
+        logger.debug(message)
       end
 
       private
