@@ -6,6 +6,8 @@ require 'json'
 require 'websocket/driver'
 require 'concurrent'
 
+require 'rocket_chat/realtime/methods/auth'
+
 module RocketChat
   module Realtime
     # Rocket.Chat Reamtime API
@@ -13,6 +15,8 @@ module RocketChat
     # @since 0.1.0
     class Client
       extend Forwardable
+
+      include Methods::Auth
 
       # @since 0.1.0
       INITIALIZE_COMMAND = {
