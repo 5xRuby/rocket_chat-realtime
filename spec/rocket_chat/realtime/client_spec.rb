@@ -61,6 +61,14 @@ RSpec.describe RocketChat::Realtime::Client do
     let(:selector) { NIO::Selector.new }
     let(:monitor) { selector.register(socket, :rw) }
 
+    before { server }
+
+    after do
+      server.close
+      socket.close
+      selector.close
+    end
+
     it { expect { process }.not_to raise_error }
   end
 end

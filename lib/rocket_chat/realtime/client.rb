@@ -70,6 +70,8 @@ module RocketChat
       def process(monitor)
         driver.parse(monitor.io.read_nonblock(2**14)) if monitor.readable?
         adapter.pump_buffer(monitor.io) if monitor.writeable?
+      rescue IO::WaitReadable, IO::WaitWritable
+        # nope
       rescue Errno::ECONNRESET, EOFError, Errno::ECONNABORTED
         monitor.close
         disconnect
