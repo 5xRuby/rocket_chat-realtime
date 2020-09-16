@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'logger'
+
 require 'rocket_chat/realtime/version'
 require 'rocket_chat/realtime/reactor'
 require 'rocket_chat/realtime/connector'
@@ -10,6 +12,25 @@ module RocketChat
   # RocketChat Realtiem API
   module Realtime
     module_function
+
+    # Logger
+    #
+    # @return [Logger]
+    #
+    # @since 0.1.0
+    def logger
+      @logger ||=
+        Logger.new(STDERR, progname: name, level: Logger::ERROR)
+    end
+
+    # Set logger
+    #
+    # @param logger [Logger]
+    #
+    # @since 0.1.0
+    def logger=(logger)
+      @logger = logger
+    end
 
     # Connect to RocketChat
     #

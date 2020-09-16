@@ -5,6 +5,20 @@ RSpec.describe RocketChat::Realtime do
     expect(RocketChat::Realtime::VERSION).not_to be nil
   end
 
+  describe '.logger' do
+    subject { described_class.logger }
+
+    it { is_expected.to be_a(Logger) }
+
+    context 'when customize logger' do
+      let(:logger) { Logger.new(STDERR) }
+
+      before { described_class.logger = logger }
+
+      it { is_expected.to eq(logger) }
+    end
+  end
+
   describe '.connect' do
     subject { described_class.connect(options) }
 
