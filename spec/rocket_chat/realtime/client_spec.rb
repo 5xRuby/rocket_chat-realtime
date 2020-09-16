@@ -34,6 +34,12 @@ RSpec.describe RocketChat::Realtime::Client do
     it { is_expected.to be_a(WebSocket::Driver::Client) }
   end
 
+  describe '#event' do
+    subject { client.event }
+
+    it { is_expected.to be_a(RocketChat::Realtime::EventManager) }
+  end
+
   describe '#connect' do
     subject(:connect) { client.connect }
 
@@ -53,7 +59,6 @@ RSpec.describe RocketChat::Realtime::Client do
 
     let(:addr) { '127.0.0.1' }
 
-    # TODO: Fix IO::EAGAINWaitReadable error
     let(:server) { TCPServer.new(addr, 0) }
     let(:port) { server.local_address.ip_port }
     let(:socket) { TCPSocket.new(addr, port) }

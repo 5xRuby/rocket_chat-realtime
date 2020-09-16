@@ -9,13 +9,17 @@ module RocketChat
     # @since 0.1.0
     class Client
       # @since 0.1.0
-      attr_reader :server
+      attr_reader :server, :connector, :adapter, :driver, :event
 
       # @param options [Hash]
       #
       # @since 0.1.0
       def initialize(options = {})
         @server = options[:server]
+        @connector = Connector.new(endpoint)
+        @adapter = Adapter.new(endpoint)
+        @driver = WebSocket::Driver.client(adapter)
+        @event = EventManager.new(driver)
       end
 
       # @return [String] the realtime api endpoint
@@ -23,27 +27,6 @@ module RocketChat
       # @since 0.1.0
       def endpoint
         "#{server}/websocket"
-      end
-
-      # @return [RocketChat::Realtime::Connector]
-      #
-      # @since 0.1.0
-      def connector
-        @connector ||= Connector.new(endpoint)
-      end
-
-      # @return [RocketChat::Realtime::Adapter]
-      #
-      # @since 0.1.0
-      def adapter
-        @adapter ||= Adapter.new(endpoint)
-      end
-
-      # @return [WebSocket::Driver::Client]
-      #
-      # @since 0.1.0
-      def driver
-        @driver ||= WebSocket::Driver.client(adapter)
       end
 
       # Connect to server
@@ -73,6 +56,7 @@ module RocketChat
       rescue IO::WaitReadable, IO::WaitWritable
         # nope
       rescue Errno::ECONNRESET, EOFError, Errno::ECONNABORTED
+        RocketChat::Realtime.logger.warn('Remote server is closed.')
         monitor.close
         disconnect
       end
