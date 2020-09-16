@@ -22,10 +22,11 @@ module RocketChat
       def initialize(driver)
         @driver = driver
 
-        driver.on(:open) { |_event| logger.info('Client is connected') }
-        driver.on(:close) { |event| logger.info("Client is closed due to #{event.reason}") }
         driver.on(:error) { |event| logger.error(event.message) }
         driver.on(:message) { |event| dispatch(event) }
+
+        register_connection_event
+        register_heartbeat_event
       end
 
       # Dispatch event to listeners
@@ -36,6 +37,30 @@ module RocketChat
       def dispatch(event)
         logger.info(event.data)
         # TODO
+      end
+
+      private
+
+      # Register Connection Event
+      #
+      # @since 0.1.0
+      def register_connection_event
+        # TODO: Add Client identity to log
+        driver.on(:open) { |_event| logger.info('Client is connected') }
+        driver.on(:close) { |event| logger.info("Client is closed due to #{event.reason}") }
+      end
+
+      # Register Heartbeat Event
+      #
+      # @since 0.1.0
+      def register_heartbeat_event
+        driver.on :pong do |event|
+          unless event.data.empty?
+            start_time = Time.at(event.data.to_f)
+            ttl = ((Time.now - start_time).to_f * 1000).round(4)
+            logger.info("Heartbeat TTL: #{ttl}ms")
+          end
+        end
       end
     end
   end

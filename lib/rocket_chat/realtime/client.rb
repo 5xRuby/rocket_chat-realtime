@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
 require 'forwardable'
+
 require 'websocket/driver'
+require 'concurrent'
 
 module RocketChat
   module Realtime
@@ -26,6 +28,7 @@ module RocketChat
         @adapter = Adapter.new(endpoint)
         @driver = WebSocket::Driver.client(adapter)
         @event = EventManager.new(driver)
+        @heartbeat = Concurrent::TimerTask.new(execution_interval: 5) { ping(Time.now.to_f.to_s) if opened? }
       end
 
       # @return [String] the realtime api endpoint
@@ -40,6 +43,7 @@ module RocketChat
       # @since 0.1.0
       def connect
         driver.start
+        @heartbeat.execute
         Reactor.register(self)
       end
 
@@ -48,7 +52,17 @@ module RocketChat
       # @since 0.1.0
       def disconnect
         driver.close
+        @heartbeat.shutdown
         Reactor.deregister(self)
+      end
+
+      # WebSocket is opened
+      #
+      # @return [Boolean] open or not
+      #
+      # @since 0.1.0
+      def opened?
+        driver.state == :open
       end
 
       # Process I/O

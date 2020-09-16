@@ -16,30 +16,6 @@ RSpec.describe RocketChat::Realtime::Client do
     it { is_expected.to eq('wss://example.com/websocket') }
   end
 
-  describe '#connector' do
-    subject { client.connector }
-
-    it { is_expected.to be_a(RocketChat::Realtime::Connector) }
-  end
-
-  describe '#adapter' do
-    subject { client.adapter }
-
-    it { is_expected.to be_a(RocketChat::Realtime::Adapter) }
-  end
-
-  describe '#driver' do
-    subject { client.driver }
-
-    it { is_expected.to be_a(WebSocket::Driver::Client) }
-  end
-
-  describe '#event' do
-    subject { client.event }
-
-    it { is_expected.to be_a(RocketChat::Realtime::EventManager) }
-  end
-
   describe '#connect' do
     subject(:connect) { client.connect }
 
@@ -52,6 +28,12 @@ RSpec.describe RocketChat::Realtime::Client do
     before { client.connect }
 
     it { expect { disconnect }.to change { RocketChat::Realtime::Reactor.registered?(client) }.to(false) }
+  end
+
+  describe '#opened?' do
+    subject { client.opened? }
+
+    it { is_expected.to be_falsy }
   end
 
   describe '#process' do
