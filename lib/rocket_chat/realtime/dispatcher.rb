@@ -13,7 +13,7 @@ module RocketChat
 
       # @since 0.1.0
       HANDLERS = {
-        # TODO
+        'ping' => ->(dispatcher, _) { dispatcher.driver.text({ 'msg': 'pong' }.to_json) }
       }.freeze
 
       # @since 0.1.0
@@ -44,9 +44,9 @@ module RocketChat
         message = JSON.parse(event.data)
         handler = HANDLERS[message.fetch('msg', nil)]
         if handler
-          handler.new(event).perform
+          handler.call(self, message)
         else
-          logger.debug("No handler found for - #{message}")
+          logger.debug("No handler found for: #{message}")
           false
         end
       rescue JSON::ParserError

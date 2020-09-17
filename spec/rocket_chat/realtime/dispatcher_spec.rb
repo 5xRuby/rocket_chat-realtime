@@ -14,5 +14,11 @@ RSpec.describe RocketChat::Realtime::Dispatcher do
     let(:event) { WebSocket::Driver::MessageEvent.new(data.to_json) }
 
     it { is_expected.to be_falsy }
+
+    context 'when find dispatch handler' do
+      let(:data) { { msg: :ping } }
+
+      it { is_expected.to be_truthy }
+    end
   end
 end

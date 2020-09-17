@@ -55,8 +55,6 @@ module RocketChat
       def connect
         driver.start
         driver.text(INITIALIZE_COMMAND.to_json)
-        # TODO: Execute after connected
-        @heartbeat.execute
         Reactor.register(self)
       end
 
@@ -65,7 +63,6 @@ module RocketChat
       # @since 0.1.0
       def disconnect
         driver.close
-        @heartbeat.shutdown
         Reactor.deregister(self)
       end
 
@@ -111,7 +108,6 @@ module RocketChat
       def init_events
         @event = EventManager.new(driver)
         @dispatcher = Dispatcher.new(driver, event)
-        @heartbeat = Concurrent::TimerTask.new(execution_interval: 5) { ping(Time.now.to_f.to_s) if opened? }
       end
     end
   end
