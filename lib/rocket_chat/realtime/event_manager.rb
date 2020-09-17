@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'forwardable'
+require 'concurrent'
 
 module RocketChat
   module Realtime

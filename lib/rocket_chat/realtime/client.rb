@@ -4,7 +4,6 @@ require 'forwardable'
 require 'json'
 
 require 'websocket/driver'
-require 'concurrent'
 
 require 'rocket_chat/realtime/methods/auth'
 require 'rocket_chat/realtime/subscriptions/room'
