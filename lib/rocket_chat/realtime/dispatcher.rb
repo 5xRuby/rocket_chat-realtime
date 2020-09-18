@@ -8,6 +8,7 @@ require 'rocket_chat/realtime/handlers/result'
 
 # Subscription
 require 'rocket_chat/realtime/handlers/ready'
+require 'rocket_chat/realtime/handlers/changed'
 
 module RocketChat
   module Realtime
@@ -24,20 +25,24 @@ module RocketChat
         # RPC
         'result' => Handlers::Result,
         # Subscription
-        'ready' => Handlers::Ready
+        'ready' => Handlers::Ready,
+        'changed' => Handlers::Changed
       }.freeze
 
       # @since 0.1.0
       delegate %w[logger] => RocketChat::Realtime
 
       # @since 0.1.0
-      attr_reader :driver
+      delegate %w[driver] => :client
+
+      # @since 0.1.0
+      attr_reader :client
 
       # @param driver [WebSocket::Driver::Client]
       #
       # @since 0.1.0
-      def initialize(driver)
-        @driver = driver
+      def initialize(client)
+        @client = client
 
         driver.on(:message, &method(:dispatch))
       end
@@ -60,6 +65,15 @@ module RocketChat
         end
       rescue JSON::ParserError
         # nope
+      end
+
+      # Dispose
+      #
+      # Clear references
+      #
+      # @since 0.1.0
+      def dispose
+        @client = nil
       end
     end
   end

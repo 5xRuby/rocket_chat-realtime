@@ -41,7 +41,7 @@ module RocketChat
         @connector = Connector.new(endpoint)
         @adapter = Adapter.new(endpoint)
         @driver = WebSocket::Driver.client(adapter)
-        @dispatcher = Dispatcher.new(driver)
+        @dispatcher = Dispatcher.new(self)
       end
 
       # @return [String] the realtime api endpoint
@@ -64,6 +64,7 @@ module RocketChat
       #
       # @since 0.1.0
       def disconnect
+        @dispatcher.dispose
         driver.close
         Reactor.deregister(self)
       end

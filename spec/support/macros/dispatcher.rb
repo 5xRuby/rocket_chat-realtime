@@ -4,7 +4,7 @@ module DispatcherMacro
   def setup_dispatcher
     let(:options) { { server: 'wss://example.com' } }
     let(:client) { RocketChat::Realtime::Client.new(options) }
-    let(:dispatcher) { RocketChat::Realtime::Dispatcher.new(client.driver) }
+    let(:dispatcher) { RocketChat::Realtime::Dispatcher.new(client) }
   end
 end
 

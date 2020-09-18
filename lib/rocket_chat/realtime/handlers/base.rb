@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'forwardable'
+
 require 'rocket_chat/realtime/handlers/base'
 
 module RocketChat
@@ -21,8 +23,13 @@ module RocketChat
           end
         end
 
+        extend Forwardable
+
         # @since 0.1.0
         attr_reader :dispatcher, :message
+
+        # @since 0.1.0
+        delegate %w[client] => :dispatcher
 
         # @param dispatcher [RocketChat::Realtime::Dispatcher]
         # @param message [Hash] the message from server
