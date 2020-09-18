@@ -2,6 +2,8 @@
 
 require 'digest'
 
+require 'rocket_chat/realtime/messages/method'
+
 module RocketChat
   module Realtime
     module Methods
@@ -16,7 +18,7 @@ module RocketChat
         #
         # @since 0.1.0
         def login(username, password)
-          method = MethodMessage.new(
+          method = Messages::Method.new(
             'login',
             user: { username: username },
             password: { algorithm: 'sha-256', digest: Digest::SHA256.hexdigest(password) }

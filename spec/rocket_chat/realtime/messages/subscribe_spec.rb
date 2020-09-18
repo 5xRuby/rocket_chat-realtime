@@ -2,15 +2,15 @@
 
 require 'spec_helper'
 
-RSpec.describe RocketChat::Realtime::MethodMessage do
-  let(:name) { 'login' }
-  let(:parameters) { [] }
+RSpec.describe RocketChat::Realtime::Messages::Subscribe do
+  let(:name) { 'stream-room-messages' }
+  let(:parameters) { ['__my_messages__'] }
   let(:method) { described_class.new(name, *parameters) }
 
   describe '#body' do
     subject { method.body }
 
-    it { is_expected.to have_key(:method) }
+    it { is_expected.to have_key(:name) }
     it { is_expected.to have_key(:params) }
   end
 end

@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-RSpec.describe RocketChat::Realtime::ResultMessage do
+RSpec.describe RocketChat::Realtime::Messages::Result do
   let(:id) { SecureRandom.uuid }
   let(:result) { {} }
   let(:method) { described_class.new(id, result) }

@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'rocket_chat/realtime/handlers/base'
+require 'rocket_chat/realtime/messages/result'
 
 module RocketChat
   module Realtime
@@ -13,11 +14,11 @@ module RocketChat
       class Result < Base
         # The message result
         #
-        # @return [RocketChat::Realtime::ResultMessage]
+        # @return [RocketChat::Realtime::Messages::Result]
         #
         # @since 0.1.0
         def result
-          ResultMessage.new(
+          Messages::Result.new(
             message['id'],
             message['result']
           )
