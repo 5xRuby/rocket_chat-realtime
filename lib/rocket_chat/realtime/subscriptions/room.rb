@@ -18,7 +18,9 @@ module RocketChat
             room_id,
             false
           )
-          driver.text(subscription.to_json)
+          AsyncTask.start(subscription.id) do
+            driver.text(subscription.to_json)
+          end
         end
       end
     end

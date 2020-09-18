@@ -7,6 +7,8 @@ module RocketChat
     module Handlers
       # Result Message Handler
       #
+      # The DDP RPC return value
+      #
       # @since 0.1.0
       class Result < Base
         # The message result

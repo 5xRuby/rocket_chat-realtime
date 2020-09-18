@@ -50,9 +50,9 @@ module RocketChat
       # @return [Concurrent::Promises::ResolvableFuture]
       #
       # @since 0.1.0
-      def resolve(id, result)
+      def resolve(id, result = nil)
         task = @tasks.delete(id)
-        task&.fulfill result
+        task&.resolve true, result
         task
       end
     end

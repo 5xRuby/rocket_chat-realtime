@@ -17,6 +17,11 @@ require 'rocket_chat/realtime/client'
 
 module RocketChat
   # RocketChat Realtiem API
+  #
+  # The Realtime API is depend on Metero.js DDP
+  # https://github.com/meteor/meteor/blob/devel/packages/ddp/DDP.md
+  #
+  # @since 0.1.0
   module Realtime
     module_function
 

@@ -3,7 +3,11 @@
 require 'json'
 require 'forwardable'
 
+# RPC
 require 'rocket_chat/realtime/handlers/result'
+
+# Subscription
+require 'rocket_chat/realtime/handlers/ready'
 
 module RocketChat
   module Realtime
@@ -15,8 +19,12 @@ module RocketChat
 
       # @since 0.1.0
       HANDLERS = {
+        # Heartbeat
         'ping' => ->(dispatcher, _) { dispatcher.driver.text({ 'msg': 'pong' }.to_json) },
-        'result' => Handlers::Result
+        # RPC
+        'result' => Handlers::Result,
+        # Subscription
+        'ready' => Handlers::Ready
       }.freeze
 
       # @since 0.1.0
