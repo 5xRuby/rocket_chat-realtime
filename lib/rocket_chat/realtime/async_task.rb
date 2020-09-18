@@ -21,6 +21,9 @@ module RocketChat
       include Concurrent::Promises::FactoryMethods
 
       # @since 0.1.0
+      TASK_TIMEOUT = 60
+
+      # @since 0.1.0
       def initialize
         @tasks = Concurrent::Map.new
       end
@@ -35,8 +38,8 @@ module RocketChat
       # @since 0.1.0
       def start(id)
         # TODO: check for atomic
-        # TODO: clear task if timeout
         yield if block_given?
+        Concurrent::ScheduledTask.execute(TASK_TIMEOUT) { @tasks.delete(id)&.reject(:timeout) }
         @tasks.fetch_or_store(id, resolvable_future)
       end
 

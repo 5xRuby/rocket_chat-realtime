@@ -16,6 +16,17 @@ RSpec.describe RocketChat::Realtime::AsyncTask do
 
       it { is_expected.to eq(current_task) }
     end
+
+    context 'when task is timeout' do
+      before do
+        stub_const("#{described_class.name}::TASK_TIMEOUT", 0)
+        current_task.wait
+      end
+
+      let!(:current_task) { start }
+
+      it { expect(current_task).to be_rejected }
+    end
   end
 
   describe '.resolve' do
