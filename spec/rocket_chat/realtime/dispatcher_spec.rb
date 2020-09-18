@@ -3,9 +3,7 @@
 require 'spec_helper'
 
 RSpec.describe RocketChat::Realtime::Dispatcher do
-  let(:options) { { server: 'wss://example.com' } }
-  let(:client) { RocketChat::Realtime::Client.new(options) }
-  let(:dispatcher) { described_class.new(client.driver) }
+  setup_dispatcher
 
   describe '#dispatch' do
     subject(:dispatch) { dispatcher.dispatch(event) }
