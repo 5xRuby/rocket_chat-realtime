@@ -1,8 +1,6 @@
 # RocketChat::Realtime
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/rocket_chat/realtime`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+The ruby implement for [RocketChat Realtime API](https://docs.rocket.chat/api/realtime-api).
 
 ## Installation
 
@@ -22,7 +20,61 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+### Create a client
+
+```ruby
+client = RocketChat::Realtime::Client.new(server: 'wss://chat.example.com')
+```
+
+### Connect to server
+
+```ruby
+client.connect
+```
+
+or use a shortcut via `.connect`
+
+```ruby
+client = RocketChat::Realtime.connect(server: 'wss://chat.example.com')
+```
+
+### Login to server
+
+```ruby
+client.login(username, password)
+```
+
+The Realtime API is async and depend on the Metro.js DDP, we can use `Concurrent::Promises` to capture the return message.
+
+```ruby
+client
+  .login(username, password)
+  .then { |res| puts "Token is #{res['token']}" }
+```
+
+### Subscribe room messages
+
+```ruby
+client
+  .subscribe_room_messages('ROOM_ID')
+  .then { puts 'Ready!' }
+```
+
+### Process room messages
+
+```ruby
+client.on('stream-room-messages') do |message|
+  puts "Received message: #{message['args'][0]['msg']}"
+end
+```
+
+### Send message
+
+```ruby
+client
+  .send_message('ROOM_ID', 'MESSAGE')
+  .then { |res| puts 'Success' }
+```
 
 ## Development
 
@@ -32,9 +84,9 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/rocket_chat-realtime. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/[USERNAME]/rocket_chat-realtime/blob/master/CODE_OF_CONDUCT.md).
+Bug reports and pull requests are welcome on GitHub at https://github.com/5xRuby/rocket_chat-realtime. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/5xRuby/rocket_chat-realtime/blob/master/CODE_OF_CONDUCT.md).
 
 
 ## Code of Conduct
 
-Everyone interacting in the RocketChat::Realtime project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/rocket_chat-realtime/blob/master/CODE_OF_CONDUCT.md).
+Everyone interacting in the RocketChat::Realtime project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/5xRuby/rocket_chat-realtime/blob/master/CODE_OF_CONDUCT.md).
