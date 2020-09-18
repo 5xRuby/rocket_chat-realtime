@@ -31,15 +31,13 @@ module RocketChat
       delegate %w[logger] => RocketChat::Realtime
 
       # @since 0.1.0
-      attr_reader :driver, :event
+      attr_reader :driver
 
       # @param driver [WebSocket::Driver::Client]
-      # @param event [RocketChat::Realtime::EventManager]
       #
       # @since 0.1.0
-      def initialize(driver, event)
+      def initialize(driver)
         @driver = driver
-        @event = event
 
         driver.on(:message, &method(:dispatch))
       end
