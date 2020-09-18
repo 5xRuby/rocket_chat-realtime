@@ -16,6 +16,7 @@ module RocketChat
     class Client
       extend Forwardable
 
+      include EventEmitter
       include Methods::Auth
       include Subscriptions::Room
 

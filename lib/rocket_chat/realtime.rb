@@ -12,6 +12,7 @@ require 'rocket_chat/realtime/connector'
 require 'rocket_chat/realtime/adapter'
 require 'rocket_chat/realtime/dispatcher'
 require 'rocket_chat/realtime/async_task'
+require 'rocket_chat/realtime/event_emitter'
 require 'rocket_chat/realtime/client'
 
 module RocketChat
