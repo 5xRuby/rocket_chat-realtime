@@ -28,13 +28,15 @@ module RocketChat
       # Register a new task
       #
       # @param id [String] task id
-      # @param block [Proc] task body
+      # @param block [Proc] async taks to execute
       #
       # @return [Concurrent::Promises::ResolvableFuture]
       #
       # @since 0.1.0
       def start(id)
         # TODO: check for atomic
+        # TODO: clear task if timeout
+        yield if block_given?
         @tasks.fetch_or_store(id, resolvable_future)
       end
 

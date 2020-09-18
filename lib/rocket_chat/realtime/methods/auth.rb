@@ -19,12 +19,11 @@ module RocketChat
           method = MethodMessage.new(
             'login',
             user: { username: username },
-            password: {
-              algorithm: 'sha-256',
-              digest: Digest::SHA256.hexdigest(password)
-            }
+            password: { algorithm: 'sha-256', digest: Digest::SHA256.hexdigest(password) }
           )
-          driver.text(method.to_json)
+          AsyncTask.start(method.id) do
+            driver.text(method.to_json)
+          end
         end
       end
     end
