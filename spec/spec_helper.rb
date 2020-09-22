@@ -4,6 +4,7 @@ require 'bundler/setup'
 require 'simplecov'
 SimpleCov.start do
   load_profile 'test_frameworks'
+  add_filter 'vendor'
 end
 require 'rocket_chat/realtime'
 
