@@ -33,6 +33,8 @@ RSpec.describe RocketChat::Realtime::Client do
   describe '#opened?' do
     subject { client.opened? }
 
+    before { client.connect }
+
     it { is_expected.to be_falsy }
   end
 

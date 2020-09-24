@@ -25,6 +25,7 @@ module RocketChat
           stop
           stopped?
           reset
+          wakeup
         ] => :instance
       end
 
@@ -64,6 +65,7 @@ module RocketChat
         @clients.add(client)
         monitor = selector.register(client.connector.socket, :rw)
         monitor.value = client
+        monitor
       end
 
       # Deregister Client

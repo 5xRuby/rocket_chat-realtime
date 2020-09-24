@@ -33,7 +33,7 @@ module RocketChat
       delegate %w[ping pong] => :driver
 
       # @since 0.1.0
-      attr_reader :server, :connector, :adapter, :driver
+      attr_reader :server, :connector, :adapter, :driver, :dispatcher
 
       # @param options [Hash]
       #
@@ -41,9 +41,6 @@ module RocketChat
       def initialize(options = {})
         @server = options[:server]
         @connector = Connector.new(endpoint)
-        @adapter = Adapter.new(endpoint)
-        @driver = WebSocket::Driver.client(adapter)
-        @dispatcher = Dispatcher.new(self)
       end
 
       # @return [String] the realtime api endpoint
@@ -53,19 +50,32 @@ module RocketChat
         "#{server}/websocket"
       end
 
+      # Add to reactor
+      #
+      # @since 0.1.0
+      def add_to_reactor
+        monitor = Reactor.register(self)
+        return if monitor.nil?
+
+        @adapter = Adapter.new(endpoint, monitor)
+        @driver = WebSocket::Driver.client(adapter)
+        @dispatcher = Dispatcher.new(self)
+      end
+
       # Connect to server
       #
       # @since 0.1.0
       def connect
+        add_to_reactor
         driver.start
         driver.text(INITIALIZE_COMMAND.to_json)
-        Reactor.register(self)
       end
 
       # Close connection to server
       #
       # @since 0.1.0
       def disconnect
+        @adapter.dispose
         @dispatcher.dispose
         driver.close
         Reactor.deregister(self)
@@ -86,8 +96,9 @@ module RocketChat
       #
       # @since 0.1.0
       def process(monitor)
+        monitor.interests = adapter.pending? ? :rw : :r
         driver.parse(monitor.io.read_nonblock(2**14)) if monitor.readable?
-        adapter.pump_buffer(monitor.io) if monitor.writeable?
+        adapter.pump_buffer if monitor.writeable?
       rescue IO::WaitReadable, IO::WaitWritable
         # nope
       rescue Errno::ECONNRESET, EOFError, Errno::ECONNABORTED
